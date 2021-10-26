@@ -1,0 +1,45 @@
+.inAccordion {
+	max-width: 1300px;
+}
+
+.accordionItem {
+	margin: 15px 0;
+	overflow: hidden;
+	border-radius: 35px !important;
+}
+
+.accordion-item:first-of-type .accordion-button,
+.accordion-item:first-of-type,
+.accordion-item:last-of-type .accordion-button.collapsed,
+.accordion-item:last-of-type {
+	border-radius: 0; 
+}
+
+.accordion-button:not(.collapsed) {
+	color: white;
+}
+
+.generalBody {
+	display: flex;
+	flex-flow: row wrap;
+	//justify-content: space-around;
+}
+
+.datoGeneral {
+	box-shadow: 15px 15px 30px 10px #1111;
+	border-radius: 10px;
+	width: 95%;
+	margin: 10px 2.5%;
+	padding: 10px;
+}
+
+@media (min-width: $md-breakpoint) {
+	.datoGeneral {
+		width: 45%;
+	}
+}
+
+.datoGeneralLabel {
+	color: $gray-500;
+	font-size: 0.7rem;
+}

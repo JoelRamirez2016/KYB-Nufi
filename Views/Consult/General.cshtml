@@ -1,0 +1,53 @@
+@model Nufi.kyb.v2.Models.GeneralPage
+@using Nufi.kyb.v2.Components
+@{
+    ViewData["Title"] = "Nufi | KYB";
+}
+
+@section sidebar{
+@(await Html.RenderComponentAsync<Sidebar>(RenderMode.ServerPrerendered))
+	}
+
+@section header{
+@(await Html.RenderComponentAsync<Header>(RenderMode.Static, new {index="true"}))
+}
+
+<div class="container flex flex-column justify-content-center">
+  <h1 class="display-4 text-center">Información General</h1>
+  <div class="accordion inAccordion">
+    <div class="container-fluid p-0">
+      @{
+        int i = -1;
+      }
+      @foreach (var seccion in Model.Secciones)
+      {
+        i++;
+        <div class="accordion-item accordionItem">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed bg-primary" type="button" data-bs-toggle="collapse"
+            data-bs-target="#@Model.createId("collapse", i.ToString())"
+            aria-expanded="true" aria-controls="collapseOne">
+              @seccion.titulo
+            </button>
+          </h2>
+          <div
+          id="@Model.createId("collapse", i.ToString())"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div class="generalBody">
+                @foreach (var dato in seccion.datos)
+                {
+                  <div class="datoGeneral">
+                    <label for="razonSocialInfo" class="fw-bold datoGeneralLabel">@dato.label</label>
+                    <div id="razonSocialInfo">@dato.texto</div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

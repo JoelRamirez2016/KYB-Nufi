@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand d-flex flex-column align-item-start sidebar bg-white border-end" id="sidebar" >
+  <div class="container px-4 py-3">
+    <div class="profile-picture">
+      <img src="./assets/img/lion-profile.jpg" width="50px" height="50px" alt="">
+    </div>
+    <div class="logo">
+      <img src="assets/img/nufi-logo-min.png" width="120px" alt="">
+    </div>
+  </div>
+  <div class="container px-4 mb-3"><h4>Juanito Alimaña</h4></div>
+  <div class="border-bottom border-top container-fluid p-0">
+    <ul class="@sideMenuClasses my-3">
+      @foreach(var option in options)
+      {
+        <!--<MenuOption text="@option.text" icon="@option.icon"></MenuOption>-->
+        <li class="nav-item d-flex m-2 px-2 align-items-center rounded">
+          <i class="@option.icon mx-2 fs-4"></i>
+          <a class="nav-link text-dark pl-4 flex-fill ms-2" href="#">@option.text</a>
+        </li>
+      }
+    </ul>
+  </div>
+  <ul class="@sideMenuClasses my-3">
+  <!--<MenuOption text="Cerrar Sesión" icon="bi bi-door-closed-fill"></MenuOption>-->
+      <li class="nav-item d-flex m-2 px-2 align-items-center rounded">
+        <i class="bi bi-door-closed-fill mx-2 fs-4"></i>
+        <a class="nav-link text-red fw-normal pl-4 flex-fill ms-2" href="#">Cerrar Sesión</a>
+      </li>
+  </ul>
+</nav>
+
+@code {
+  string sideMenuClasses = "navbar-nav flex-column side-menu w-100";
+  class MenuOption
+  {
+    public MenuOption (string text, string icon)
+    {
+      this.text = text;
+      this.icon = icon;
+    }
+    public string text { get; set; }
+    public string icon { get; set; }
+  }
+  MenuOption[] options = new MenuOption[] {
+    new MenuOption("Consultar Empresas", "bi bi-building"),
+    new MenuOption("Historial de Consultas", "bi bi-arrow-counterclockwise"),
+    new MenuOption("Configuración", "bi bi-gear-fill")
+  };
+}

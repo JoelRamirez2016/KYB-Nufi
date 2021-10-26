@@ -1,0 +1,44 @@
+﻿@model Nufi.kyb.v2.Models.IndexPage
+@using Nufi.kyb.v2.Components
+@{
+    ViewData["Title"] = "Nufi | KYB";
+}
+
+@section sidebar{
+@(await Html.RenderComponentAsync<Sidebar>(RenderMode.ServerPrerendered))
+	}
+
+@section header{
+@(await Html.RenderComponentAsync<Header>(RenderMode.Static, new {index="true"}))
+}
+
+<div class="container flex-fill d-flex flex-column align-items-center justify-content-center p-5">
+  <h1 class="head-form w-100">Consulta de Empresas</h1>
+  <p class="w-100 mb-4">Búsqueda de antecedentes e información de una empresa</p>
+  <p class="w-100">Inspecciona y valida rápidamente registros públicos en diferentes categorías de manera rápida y segura para personas morales. </p>
+  <div class="row">
+    <div class="col">
+      <div class="container bg-white border p-4">
+        <p class="border-bottom pb-2 fw-bold">Ingresa los siguientes datos para realizar la búsqueda:</p>
+        <form action="Consult/General" id="ConsultaForm">
+          <div class="mb-3 row">
+            @foreach(var field in Model.Fields)
+            {
+            <div class="col col-12 col-md-4">
+              <label for="@field.id" class="form-label mb-0 mt-3">@field.label</label>
+              <input type="text" name="@field.id" class="form-control" id="@field.id">
+            </div>
+            }
+          </div>
+          <div class="d-flex justify-content-between align-items-center px-3">
+            <p>* Campo Requerido</p>
+            <button type="submit" class="btn btn-primary text-light rounded-pill d-flex">
+              SIGUIENTE
+              <i class="bi bi-caret-right-fill"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

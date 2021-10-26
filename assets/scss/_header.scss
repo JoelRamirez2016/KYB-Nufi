@@ -1,0 +1,13 @@
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+.menu-btn:active,
+.menu-btn:hover,
+.menu-btn {
+	border: none;
+	background-color: #fff0;
+	box-shadow: none;
+}

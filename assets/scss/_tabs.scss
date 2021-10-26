@@ -1,0 +1,54 @@
+.tabs {
+  .nav-item-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 155px !important;
+    margin: 0 5px;
+  }
+
+  .nav-link-tabs {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  .tabs-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap !important;
+    gap: 10px 0;
+  }
+}
+
+.dropdown {
+  width: 100%;
+
+  button {
+    width: 100%;
+    color: #fff;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+  }
+}
+
+@media (max-width: $md-breakpoint) {
+  .tabs {
+    display: none;
+  }
+  .dropdown {
+    display: flex;
+  }
+}
+
+@media (min-width: $md-breakpoint + 1) {
+  .tabs {
+    display: flex;
+  }
+  .dropdown {
+    display: none;
+  }
+}
