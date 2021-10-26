@@ -14,8 +14,8 @@ namespace Nufi.kyb.v2.Controllers
     {
         private readonly ILogger<ConsultController> _logger;
         public ActaConstitutiva actaConstitutiva { get; set; }
-        public SATData[] sat { get; set; }
         public NufiApiService ApiService;
+		public SATData[] sat { get; set; }
 
         public ConsultController(ILogger<ConsultController> logger, NufiApiService apiService)
         {
@@ -54,11 +54,18 @@ namespace Nufi.kyb.v2.Controllers
                 new Dato("Código Postal", actaConstitutiva.domicilio_fiscal.codigo_postal.ToString()),
                 new Dato("Entidad Federativa / Demarcación", actaConstitutiva.domicilio_fiscal.entidad_federativa),
                 new Dato("País", actaConstitutiva.domicilio_fiscal.pais),
-                new Dato("Delegación / Municipio", actaConstitutiva.domicilio_fiscal.municipio),
+                new Dato("Delegación / Municipio", actaConstitutiva.domicilio_fiscal.municipio)
             };
 
             sat = ApiService.GetSAT("ADAME SILVA AURELIO", "AASA420925JN5").Result;
-            var seccionesSat = new Seccion[] { };
+			//System.Console.WriteLine("El sat es");
+			//System.Console.WriteLine(sat.Length);
+			//System.Console.WriteLine(sat[0].rfc);
+			//System.Console.WriteLine(sat[1]);
+
+			List<Seccion> seccionesSatLista = new List<Seccion>();
+				//System.Console.WriteLine("La longitud de secionesSat es:");
+				//System.Console.WriteLine(seccionesSat.Length);
             int i = 0;
             foreach (var registro in sat)
             {
@@ -70,21 +77,26 @@ namespace Nufi.kyb.v2.Controllers
                         new Dato("Publicación Página SAT Presuntos", registro.fecha_publi_sat_presuntos),
                         new Dato("Publicación Diario Oficial de la Federación Presuntos", registro.fecha_publi_dof_presuntos),
                 };
-                seccionesSat.Append(new Seccion("Registro " + i.ToString(), datosSat));
+				//System.Console.WriteLine("Los datos sat son");
+				//System.Console.WriteLine(datosSat);
+				//System.Console.WriteLine(datosSat.Length);
+				//System.Console.WriteLine(datosSat[0]);
+				//System.Console.WriteLine(datosSat[0].texto);
+                seccionesSatLista.Add(new Seccion("Registro " + i.ToString(), datosSat));
             }
+			var seccionesSat = seccionesSatLista.ToArray();
 
-            var secciones = new Seccion[]
-            {
-                new Seccion("Información General", datosGenerales),
-                new Seccion("Información Domiciliaria", datosDomiciliarios)
-            };
+			System.Console.WriteLine("Las secciones son:");
+			System.Console.WriteLine(seccionesSat.Length);
 
             var superSecciones = new SuperSeccion[]
             {
-                new SuperSeccion("Servicio de Administración Tributaria (SAT)", seccionesSat)
+                new SuperSeccion(false, "Información General", datosGenerales),
+                new SuperSeccion(false, "Información Domiciliaria", datosDomiciliarios),
+                new SuperSeccion(true, "Servicio de Administración Tributaria (SAT)", seccionesSat)
             };
 
-            GeneralPage General = new GeneralPage(secciones, superSecciones);
+            GeneralPage General = new GeneralPage(superSecciones);
             return View(General);
         }
 

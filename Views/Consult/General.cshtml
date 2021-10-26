@@ -17,25 +17,54 @@
   <div class="accordion inAccordion">
     <div class="container-fluid p-0">
       @{
-        int i = -1;
+        int i = 0;
       }
-      @foreach (var seccion in Model.Secciones)
+      @foreach (var superSeccion in Model.SuperSecciones)
       {
         i++;
         <div class="accordion-item accordionItem">
-          <h2 class="accordion-header" id="headingOne">
+          <h2 class="accordion-header" id="@Model.createId("heading", i.ToString())">
             <button class="accordion-button collapsed bg-primary" type="button" data-bs-toggle="collapse"
             data-bs-target="#@Model.createId("collapse", i.ToString())"
             aria-expanded="true" aria-controls="collapseOne">
-              @seccion.titulo
+              @superSeccion.titulo
             </button>
           </h2>
           <div
           id="@Model.createId("collapse", i.ToString())"
           class="accordion-collapse collapse"
-          aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          aria-labelledby="@Model.createId("heading", i.ToString())" data-bs-parent="#accordionExample">
+
+          @if(superSeccion.isSuper == true)
+          {
             <div class="accordion-body">
-              <div class="generalBody">
+            <div class="generalBody">
+
+            @*Aqui empieza el acoreon peque;o*@
+
+
+
+<div class="accordion inAccordion">
+    <div class="container-fluid p-0">
+      @{
+        int j = 0;
+      }
+      @foreach (var seccion in superSeccion.secciones)
+      {
+        j++;
+        <div class="accordion-item accordionItem">
+          <h2 class="accordion-header" id="@Model.createId("heading", (i * 100 + j).ToString())">
+            <button class="accordion-button collapsed bg-primary" type="button" data-bs-toggle="collapse"
+            data-bs-target="#@Model.createId("collapse", (i * 100 + j).ToString())"
+            aria-expanded="true" aria-controls="collapseOne">
+              @seccion.titulo
+            </button>
+          </h2>
+          <div
+          id="@Model.createId("collapse", (i * 100 + j).ToString())"
+          class="accordion-collapse collapse"
+          aria-labelledby="@Model.createId("heading", (i * 100 + j).ToString())" data-bs-parent="#accordionExample">
+            <div class="accordion-body generalBody">
                 @foreach (var dato in seccion.datos)
                 {
                   <div class="datoGeneral">
@@ -43,8 +72,28 @@
                     <div id="razonSocialInfo">@dato.texto</div>
                   </div>
                 }
-              </div>
             </div>
+          </div>
+        </div>
+      }
+    </div>
+</div>
+            @*Aqui termina el acoreon peque;o*@
+            </div>
+            </div>
+          }
+          else
+          {
+            <div class="accordion-body generalBody">
+                @foreach (var dato in superSeccion.datos)
+                {
+                  <div class="datoGeneral">
+                    <label for="razonSocialInfo" class="fw-bold datoGeneralLabel">@dato.label</label>
+                    <div id="razonSocialInfo">@dato.texto</div>
+                  </div>
+                }
+            </div>
+          }
           </div>
         </div>
       }
