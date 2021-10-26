@@ -1,7 +1,7 @@
 @model Nufi.kyb.v2.Models.GeneralPage
 @using Nufi.kyb.v2.Components
 @{
-    ViewData["Title"] = "Nufi | KYB";
+    ViewData["Title"] = "Consulta Empresas - General";
 }
 
 @section sidebar{
@@ -9,7 +9,7 @@
 	}
 
 @section header{
-@(await Html.RenderComponentAsync<Header>(RenderMode.Static, new {index="true"}))
+@(await Html.RenderComponentAsync<Header>(RenderMode.Static, new {index="false"}))
 }
 
 <div class="container flex flex-column justify-content-center">
