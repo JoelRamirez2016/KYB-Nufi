@@ -25,7 +25,7 @@ namespace Nufi.kyb.v2.Services
         public IWebHostEnvironment WebHostEnvironment { get; }
         private readonly IHttpClientFactory _clientFactory;
         public ActaConstitutiva actaConstitutiva { get; set; }
-        public SATData[] sat { get; set; }
+        public NufiRequest satRequest { get; set; }
 
         public async Task<ActaConstitutiva> GetActaConstitutiva(
                 string razonSocial,
@@ -59,7 +59,7 @@ namespace Nufi.kyb.v2.Services
             return actaConstitutiva;
         }
 
-        public async Task<SATData[]> GetSAT(
+        public async Task<NufiRequest> GetSAT(
                 string nombre,
                 string rfc)
         {
@@ -81,14 +81,13 @@ namespace Nufi.kyb.v2.Services
             if (response.IsSuccessStatusCode)
             {
                 var responseStream = await response.Content.ReadAsStreamAsync();
-                var satRequest = await JsonSerializer.DeserializeAsync<SATRequest>(responseStream);
-                sat = satRequest.data;
+                satRequest = await JsonSerializer.DeserializeAsync<NufiRequest>(responseStream);
             }
             else
             {
-                sat = new SATData[] { };
+                satRequest = new NufiRequest();
             }
-            return sat;
+            return satRequest;
         }
     }
 }
