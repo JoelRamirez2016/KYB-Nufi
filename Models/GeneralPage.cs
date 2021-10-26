@@ -12,11 +12,12 @@ namespace Nufi.kyb.v2.Models
 {
     public class GeneralPage
     {
-		public GeneralPage(Seccion[] secciones)
+		public GeneralPage(SuperSeccion[] superSecciones)
 		{
-			Secciones = secciones;
+			SuperSecciones = superSecciones;
 		}
-		public Seccion[] Secciones { get; set; }
+		public SuperSeccion[] SuperSecciones { get; set; }
+
 
 		public string createId(string a, string b)
 		{

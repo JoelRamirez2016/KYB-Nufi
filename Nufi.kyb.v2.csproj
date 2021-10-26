@@ -9,7 +9,7 @@
   </Target>
 
   <ItemGroup>
-	<Watch Include="assets/**" />
-	<Watch Include="Views/**" />
+    <Watch Include="assets/**" />
+    <Watch Include="Views/**" />
   </ItemGroup>
 </Project>
