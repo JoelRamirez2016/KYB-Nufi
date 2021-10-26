@@ -14,48 +14,81 @@ using Nufi.kyb.v2.Models;
 
 namespace Nufi.kyb.v2.Services
 {
-	public class NufiApiService
-	{
-		public NufiApiService(IWebHostEnvironment webHostEnvironment,
-				IHttpClientFactory clientFactory)
-		{
-			WebHostEnvironment = webHostEnvironment;
-			_clientFactory = clientFactory;
-		}
-		public IWebHostEnvironment WebHostEnvironment { get; }
-		private readonly IHttpClientFactory _clientFactory;
-		public ActaConstitutiva actaConstitutiva { get; set; }
-
-		public async Task<ActaConstitutiva> GetActaConstitutiva(
-				string razonSocial,
-				string rfc,
-				string marca)
+    public class NufiApiService
+    {
+        public NufiApiService(IWebHostEnvironment webHostEnvironment,
+                IHttpClientFactory clientFactory)
         {
-			var request = new HttpRequestMessage(HttpMethod.Post,
-					"https://stoplight.io/mocks/alfredpianist/kyb-api/23013508/actas_constitutivas/consultar");
-			request.Content = new StringContent(JsonSerializer.Serialize(
-						new Dictionary<string, string>(){
-						{"razon_social", razonSocial},
-						{"rfc", rfc},
-						{"marca", marca}}
-						));
-			request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
-			var client = _clientFactory.CreateClient();
-			client.DefaultRequestHeaders.Accept.Add(
-					new MediaTypeWithQualityHeaderValue("application/json"));
-
-			var response = await client.SendAsync(request);
-
-			if (response.IsSuccessStatusCode)
-			{
-				var responseStream = await response.Content.ReadAsStreamAsync();
-				actaConstitutiva = await JsonSerializer.DeserializeAsync<ActaConstitutiva>(responseStream);
-			}
-			else
-			{
-				actaConstitutiva = new ActaConstitutiva();
-			}
-			return actaConstitutiva;
+            WebHostEnvironment = webHostEnvironment;
+            _clientFactory = clientFactory;
         }
-	}
+        public IWebHostEnvironment WebHostEnvironment { get; }
+        private readonly IHttpClientFactory _clientFactory;
+        public ActaConstitutiva actaConstitutiva { get; set; }
+        public SATData[] sat { get; set; }
+
+        public async Task<ActaConstitutiva> GetActaConstitutiva(
+                string razonSocial,
+                string rfc,
+                string marca)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                    "https://stoplight.io/mocks/alfredpianist/kyb-api/23013508/actas_constitutivas/consultar");
+            request.Content = new StringContent(JsonSerializer.Serialize(
+                        new Dictionary<string, string>(){
+                        {"razon_social", razonSocial},
+                        {"rfc", rfc},
+                        {"marca", marca}}
+                        ));
+            request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseStream = await response.Content.ReadAsStreamAsync();
+                actaConstitutiva = await JsonSerializer.DeserializeAsync<ActaConstitutiva>(responseStream);
+            }
+            else
+            {
+                actaConstitutiva = new ActaConstitutiva();
+            }
+            return actaConstitutiva;
+        }
+
+        public async Task<SATData[]> GetSAT(
+                string nombre,
+                string rfc)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                    "https://nufi.azure-api.net/contribuyentes/v1/obtener_contribuyente");
+            request.Content = new StringContent(JsonSerializer.Serialize(
+                        new Dictionary<string, string>(){
+                        {"nombre", nombre},
+                        {"rfc", rfc}}
+                        ));
+            request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "7bafe13ba4d9450f88a39922bdec4f03");
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseStream = await response.Content.ReadAsStreamAsync();
+                var satRequest = await JsonSerializer.DeserializeAsync<SATRequest>(responseStream);
+                sat = satRequest.data;
+            }
+            else
+            {
+                sat = new SATData[] { };
+            }
+            return sat;
+        }
+    }
 }
