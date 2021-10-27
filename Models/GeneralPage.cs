@@ -10,18 +10,12 @@ using Nufi.kyb.v2.Models;
 
 namespace Nufi.kyb.v2.Models
 {
-    public class GeneralPage
+    public class GeneralPage : Page
     {
 		public GeneralPage(SuperSeccion[] superSecciones)
 		{
 			SuperSecciones = superSecciones;
 		}
 		public SuperSeccion[] SuperSecciones { get; set; }
-
-
-		public string createId(string a, string b)
-		{
-			return a + b;
-		}
     }
 }
