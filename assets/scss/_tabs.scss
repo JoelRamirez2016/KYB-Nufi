@@ -29,13 +29,19 @@
     width: 100%;
     color: #fff;
   }
-
   .dropdown-menu {
     width: 100%;
   }
 }
 
-@media (max-width: $md-breakpoint) {
+.tabs-mobile {
+  text-align: end;
+  overflow: hidden;
+  right: -2%!important;
+  width: auto!important;
+}
+
+@media (max-width: $xl-breakpoint) {
   .tabs {
     display: none;
   }
@@ -44,7 +50,7 @@
   }
 }
 
-@media (min-width: $md-breakpoint + 1) {
+@media (min-width: $xl-breakpoint + 1) {
   .tabs {
     display: flex;
   }

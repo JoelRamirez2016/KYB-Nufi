@@ -1,5 +1,6 @@
 @import "variables";
 
+
 .menu-btn__icon {
   font-weight: 500;
 }
@@ -8,14 +9,14 @@
   z-index: 1100;
   position: fixed !important;
   margin-left: calc(-1 * $sideBarSize - 50px);
-  transition: 0.4s;
+  transition: $transition-time;
   height: 100vh;
   width: $sideBarSize;
   background-color: white;
 }
 
 .main-container {
-  transition: 0.4s;
+  transition: $transition-time;
 }
 
 .sidebar.active {
@@ -26,11 +27,6 @@
   margin-left: $sideBarSize;
 }
 
-@media (max-width: $md-breakpoint) {
-  .main-container.active {
-    margin-left: 0;
-  }
-}
 
 /*Inner sidebar Style*/
 .profile-picture img {
@@ -47,8 +43,28 @@
   color: red;
 }
 
-//This is a test to try to use images from scss
-.mio {
-  //background: url('../img/lion-profile.jpg');
-  border: 1px solid red;
+.sidebar-back {
+  background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
+  width: 500vw;
+  height: 100vh;
+  position: fixed;
+  right: 100%;
+  transition: $transition-time;
+  z-index: 1;
+}
+
+.sidebar-back.active {
+	right: -400%;
+}
+
+@media (max-width: $xl-breakpoint) {
+  .main-container.active {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: $xl-breakpoint + 1) {
+  .sidebar-back.active {
+	  right: 100%;
+  }
 }
