@@ -148,7 +148,7 @@ namespace Nufi.kyb.v2.Services
                 var responseStream = await response.Content.ReadAsStreamAsync();
                 impiRequest = await JsonSerializer.DeserializeAsync<IMPIRequest>(responseStream);
             }          
-            Console.WriteLine(JsonSerializer.Serialize(impiRequest, new JsonSerializerOptions { WriteIndented = true }));
+            //Console.WriteLine(JsonSerializer.Serialize(impiRequest, new JsonSerializerOptions { WriteIndented = true }));
             return impiRequest;
         }
 
