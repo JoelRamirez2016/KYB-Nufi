@@ -15,7 +15,7 @@ namespace Nufi.kyb.v2.Controllers
         private readonly ILogger<ConsultController> _logger;
         public ActaConstitutiva actaConstitutiva { get; set; }
         public NufiApiService ApiService;
-        public NufiRequest sat { get; set; }
+        public SATRequest sat { get; set; }
 
         public ConsultController(ILogger<ConsultController> logger, NufiApiService apiService)
         {
@@ -68,6 +68,7 @@ namespace Nufi.kyb.v2.Controllers
                 foreach (var registro in sat.data)
                 {
                     i++;
+
                     var datosSat = new Dato[]
                     {
                         new Dato("Registro Federal de Contribuyentes (RFC)", registro.rfc),
@@ -99,65 +100,7 @@ namespace Nufi.kyb.v2.Controllers
                 seccionesSat = seccionesSatLista.ToArray();
             }
 
-            // RUG API - data
-            // [
-            // "fecha_inscripcion": " 2018-09-26 07:01:39",
-            // "folio_electronico": " R20180926DYBI",
-            // "nombre_otorgante": " ESTEBAN DEL CARMEN ESCALANTE COLLI",
-            // "numero_garantia": " 5627997  ",
-            // "numero_operacion": "9972484 ",
-            // "operacion": "  Certificación",
-            // "tipo_bienes_muebles": " Vehículos de motor. ",
-            // "tipo_operacion": " INSCRIPCIÓN",
-            // "url_detalle": "https://www.rug.gob.mx/Rug/home/detalle.do?idGarantia=5627997&idTramite=9972484"
-            // ]
-
-            // IMPI - data
-            // [
-            // {
-            //     "name": "CLARO",
-            //     "fileNumber": "1686470",
-            //     "requestType": "REGISTRO DE MARCA",
-            //     "headline": "CLARO S.A.",
-            //     "status": "REGISTRADO",
-            //     "generalData": {
-            //         "denomination": "CLARO",
-            //         "expedientNumber": "1686470",
-            //         "presentationData": "1695300",
-            //         "publishDate": "30/11/2015",
-            //         "type": null
-            //     },
-            //     "headlineData": {
-            //         "name": "CLARO S.A.",
-            //         "address": "RUA FLÓRIDA NUM. EXT. 1970",
-            //         "country": "BRASIL"
-            //     },
-            //     "productsAndServices": [
-            //         {
-            //             "class": "35",
-            //             "description": null
-            //         }
-            //     ],
-            //     "procedures": [
-            //         {
-            //             "image": "https://acervomarcas.impi.gob.mx:8181/marcanet/UCMServlet?info=MnwyNDIxMzB8MjAxNw==",
-            //             "paperwork": "242130",
-            //             "description": "TRAMITE MIXTO",
-            //             "startDate": "04/10/2017",
-            //             "conslutionDate": "",
-            //             "receptionYear": "2017"
-            //         },
-            //         {
-            //             "image": "https://acervomarcas.impi.gob.mx:8181/marcanet/UCMServlet?info=MnwyNjAwNTN8MjAxNQ==",
-            //             "paperwork": "260053",
-            //             "description": "SOLICITUD DE REGISTRO",
-            //             "startDate": "30/11/2015",
-            //             "conslutionDate": "07/12/2016",
-            //             "receptionYear": "2015"
-            //         }
-            //     ]
-            // }
-            // ]
+            var impi = ApiService.GetIMPI("claro").Result;
 
             // Secciones para vista
             var superSecciones = new SuperSeccion[]
