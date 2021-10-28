@@ -12,10 +12,9 @@ namespace Nufi.kyb.v2.Models
 {
     public class GeneralPage : Page
     {
-		public GeneralPage(SuperSeccion[] superSecciones)
-		{
-			SuperSecciones = superSecciones;
-		}
-		public SuperSeccion[] SuperSecciones { get; set; }
+        public GeneralPage(SuperSeccion[] superSecciones) : base(superSecciones)
+        {
+            SuperSecciones = superSecciones;
+        }
     }
 }

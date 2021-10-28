@@ -21,9 +21,9 @@ namespace Nufi.kyb.v2.Controllers
         public IActionResult Index()
         {
 			FieldForm[] fields = new FieldForm[] {
-				new FieldForm("Razón Social*", "razonSocialField"),
-				new FieldForm("RFC", "rfcField"),
-				new FieldForm("Marca", "marcaField")
+				new FieldForm("Razón Social*", "razonSocial"),
+				new FieldForm("RFC", "rfc"),
+				new FieldForm("Marca", "marca")
 			};
 			IndexPage Index = new IndexPage(fields);
             return View(Index);
