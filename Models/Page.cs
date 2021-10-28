@@ -16,7 +16,10 @@ namespace Nufi.kyb.v2.Models
         {
             SuperSecciones = superSecciones;
         }
-        public SuperSeccion[] SuperSecciones { get; set; }
+        public Page()
+        {
+        }
+        public SuperSeccion[] SuperSecciones { get; set; } = new SuperSeccion[]{};
         public string createId(string a, string b)
         {
             return a + b;

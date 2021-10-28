@@ -11,5 +11,6 @@
   <ItemGroup>
     <Watch Include="assets/**" />
     <Watch Include="Views/**" />
+    <Watch Include="Components/**" />
   </ItemGroup>
 </Project>

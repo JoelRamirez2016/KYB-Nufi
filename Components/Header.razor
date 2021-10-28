@@ -1,12 +1,12 @@
 @inherits HeaderBase
 <header class="w-100 bg-white border-bottom d-flex align-items-center">
   <div class="container d-flex align-items-center">
-    <button class="menu-btn m-4 text-center">
+    <button class="menu-btn m-4 text-center border">
       <i class="bi bi-list" style="font-size: 50px"></i>
     </button>
     @if (index != "true")
     {
-      <Tabs></Tabs>
+      <Tabs tabSelected=@tabSelected></Tabs>
     }
   </div>
 </header>

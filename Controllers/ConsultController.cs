@@ -51,7 +51,7 @@ namespace Nufi.kyb.v2.Controllers
 
         public IActionResult Antecedentes()
         {
-            Page Antecedentes = null;
+            Page Antecedentes = new Page();
             return View(Antecedentes);
         }
 
