@@ -5,5 +5,7 @@ bin/**
 node_modules/**
 wwwroot/dist/**
 wwwroot/bundle.**
+wwwroot/data/**
 .vscode/
 .vs/
+

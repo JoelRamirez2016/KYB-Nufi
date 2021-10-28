@@ -25,9 +25,10 @@ namespace Nufi.kyb.v2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-			services.AddServerSideBlazor();
-			services.AddHttpClient();
-			services.AddTransient<NufiApiService>();
+            services.AddServerSideBlazor();
+            services.AddHttpClient();
+            services.AddTransient<NufiApiService>();
+            services.AddTransient<CreatePageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +54,7 @@ namespace Nufi.kyb.v2
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-				endpoints.MapBlazorHub();
+                endpoints.MapBlazorHub();
                 endpoints.MapControllers();
             });
         }
