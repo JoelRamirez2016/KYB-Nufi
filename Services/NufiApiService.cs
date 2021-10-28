@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -151,6 +151,36 @@ namespace Nufi.kyb.v2.Services
             //Console.WriteLine(JsonSerializer.Serialize(impiRequest, new JsonSerializerOptions { WriteIndented = true }));
             return impiRequest;
         }
+
+        public async Task<AntecedentesPMNRequest> GetAntecedentesPersonaMoralNacional(
+            string nombre, string fecha_inicio, string fecha_fin)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post,
+                    "https://nufi.azure-api.net/antecedentes_judiciales/v2/persona_moral_nacional");
+            request.Content = new StringContent(JsonSerializer.Serialize(
+                        new Dictionary<string, string>(){
+                            {"nombre", nombre},
+                            {"fecha_inicio", fecha_inicio},
+                            {"fecha_fin", fecha_fin}}
+                        ));
+            request.Content.Headers.ContentType = new MediaTypeWithQualityHeaderValue("application/json");
+            var client = _clientFactory.CreateClient();
+            client.DefaultRequestHeaders.Accept.Add(
+                    new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add("NUFI-API-KEY", "7bafe13ba4d9450f88a39922bdec4f03");
+
+            var response = await client.SendAsync(request);
+            var AntecedentesPMNrequest = new AntecedentesPMNRequest();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseStream = await response.Content.ReadAsStreamAsync();
+                AntecedentesPMNrequest = await JsonSerializer.DeserializeAsync<AntecedentesPMNRequest>(responseStream);
+                Console.WriteLine(JsonSerializer.Serialize(AntecedentesPMNrequest, new JsonSerializerOptions { WriteIndented = true }));
+            }          
+            return AntecedentesPMNrequest;
+        }
+
 
     }
 

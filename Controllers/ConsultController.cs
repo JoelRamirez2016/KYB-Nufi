@@ -35,7 +35,6 @@ namespace Nufi.kyb.v2.Controllers
             //var impi = ApiService.GetIMPI("claro").Result;
 
             Page generalPage = CreatePageService.CreateGeneralPage(actaConstitutiva, sat, rfc);
-
             CreatePageService.SavePage(generalPage, GeneralPageJsonFile);
 
             return View(generalPage);
@@ -49,10 +48,22 @@ namespace Nufi.kyb.v2.Controllers
             return View(generalPage);
         }
 
-        public IActionResult Antecedentes()
-        {
-            Page Antecedentes = new Page();
-            return View(Antecedentes);
+        public IActionResult Antecedentes() {
+            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional("victor hugo",  "01-01-2020", "01-08-2021").Result;
+            var superSecciones = new SuperSeccion[]
+            {
+                new SuperSeccion(false, "Entidad n", null, new Dato[]
+                {
+                    new Dato("Actor", "texto"),
+                    new Dato("Demandado", "texto"),
+                    new Dato("Fecha", "texto"),
+                    new Dato("Fuero", "texto"),
+                    new Dato("Juzgado", "texto"),
+                    new Dato("Tipo", "texto"),
+                }),
+            };
+            
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -61,5 +72,6 @@ namespace Nufi.kyb.v2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
 }
 
