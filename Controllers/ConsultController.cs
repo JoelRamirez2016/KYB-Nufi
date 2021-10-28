@@ -32,11 +32,10 @@ namespace Nufi.kyb.v2.Controllers
         {
             ActaConstitutiva actaConstitutiva = ApiService.GetActaConstitutiva(razonSocial, rfc, marca).Result;
             SATRequest sat = ApiService.GetSAT("ADAME SILVA AURELIO", rfc).Result;
-            //var impi = ApiService.GetIMPI("claro").Result;
+            // //var impi = ApiService.GetIMPI("claro").Result;
 
             Page generalPage = CreatePageService.CreateGeneralPage(actaConstitutiva, sat, rfc);
             CreatePageService.SavePage(generalPage, GeneralPageJsonFile);
-
             return View(generalPage);
         }
 
@@ -62,8 +61,8 @@ namespace Nufi.kyb.v2.Controllers
                     new Dato("Tipo", "texto"),
                 }),
             };
-            
-            return View();
+            Page AntcPage = new Page(superSecciones);
+            return View(AntcPage);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

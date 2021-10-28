@@ -116,12 +116,7 @@ namespace Nufi.kyb.v2.Services
 
             using(var outputStream = File.OpenWrite(jsonFileName))
             {
-                JsonSerializer.Serialize<Page>(
-                    new Utf8JsonWriter(outputStream, new JsonWriterOptions
-                {
-                    SkipValidation = true,
-                    Indented = true
-                }), page);
+                JsonSerializer.Serialize<Page>(new Utf8JsonWriter(outputStream), page);
             }
         }
 
