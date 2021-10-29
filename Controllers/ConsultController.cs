@@ -32,10 +32,10 @@ namespace Nufi.kyb.v2.Controllers
         {
             ActaConstitutiva actaConstitutiva = ApiService.GetActaConstitutiva(razonSocial, rfc, marca).Result;
             SATRequest sat = ApiService.GetSAT("ADAME SILVA AURELIO", rfc).Result;
-            // //var impi = ApiService.GetIMPI("claro").Result;
+            IMPIRequest impi = ApiService.GetIMPI(marca).Result;
 
-            Page generalPage = CreatePageService.CreateGeneralPage(actaConstitutiva, sat, rfc);
-            CreatePageService.SavePage(generalPage, GeneralPageJsonFile);
+            Page generalPage = CreatePageService.CreateGeneralPage(actaConstitutiva, sat, impi, rfc, marca);
+            // CreatePageService.SavePage(generalPage, GeneralPageJsonFile);
             return View(generalPage);
         }
 
