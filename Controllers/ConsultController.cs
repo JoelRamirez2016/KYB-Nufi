@@ -1,4 +1,5 @@
 using System;
+using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -38,7 +39,12 @@ namespace Nufi.kyb.v2.Controllers
 
             CreatePageService.SavePage(generalPage, GeneralPageJsonFile);
 
-            return View(generalPage);
+            return RedirecToAction("LoadConsult");
+        }
+
+        public IActionResult LoadConsult(Page page)
+        {
+            return View(page);
         }
 
         //Get method for general page
@@ -46,13 +52,19 @@ namespace Nufi.kyb.v2.Controllers
         public IActionResult General()
         {
             Page generalPage = CreatePageService.LoadPage(GeneralPageJsonFile);
-            return View(generalPage);
+            return RedirecToAction(generalPage);
         }
 
         public IActionResult Antecedentes()
         {
             Page Antecedentes = new Page();
             return View(Antecedentes);
+        }
+
+        public IActionResult RepresentantesLegales()
+        {
+            Page representantes = new Page();
+            return View(representantes);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

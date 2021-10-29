@@ -1,7 +1,7 @@
 @model Nufi.kyb.v2.Models.Page
 @using Nufi.kyb.v2.Components
 @{
-  ViewData["Title"] = "Resumen Empresas - General";
+  ViewData["Title"] = "@Model.Title";
 }
 
 @section sidebar{
@@ -13,7 +13,7 @@
 }
 
 <div class="container flex flex-column justify-content-center">
-  <h1 class="display-4 text-center">Información General</h1>
+  <h1 class="display-4 text-center">@Model.Title</h1>
   <div class="accordion inAccordion">
     <div class="container-fluid p-0">
       @{
