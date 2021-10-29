@@ -55,6 +55,8 @@ namespace Nufi.kyb.v2.Services
             {
                 actaConstitutiva = new ActaConstitutiva();
             }
+            // Console.WriteLine(JsonSerializer.Serialize(actaConstitutiva, new JsonSerializerOptions { WriteIndented = true }));
+
             return actaConstitutiva;
         }
 
@@ -86,7 +88,7 @@ namespace Nufi.kyb.v2.Services
             {
                 satRequest = new SATRequest();
             }            
-        // Console.WriteLine(JsonSerializer.Serialize(satRequest, new JsonSerializerOptions { WriteIndented = true }));
+            // Console.WriteLine(JsonSerializer.Serialize(satRequest, new JsonSerializerOptions { WriteIndented = true }));
             return satRequest;
         }
     
@@ -174,7 +176,7 @@ namespace Nufi.kyb.v2.Services
             {
                 var responseStream = await response.Content.ReadAsStreamAsync();
                 AntecedentesPMNrequest = await JsonSerializer.DeserializeAsync<AntecedentesPMNRequest>(responseStream);
-                Console.WriteLine(JsonSerializer.Serialize(AntecedentesPMNrequest, new JsonSerializerOptions { WriteIndented = true }));
+                // Console.WriteLine(JsonSerializer.Serialize(AntecedentesPMNrequest, new JsonSerializerOptions { WriteIndented = true }));
             }          
             return AntecedentesPMNrequest;
         }
