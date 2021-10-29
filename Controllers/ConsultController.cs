@@ -32,10 +32,11 @@ namespace Nufi.kyb.v2.Controllers
         {
             ActaConstitutiva actaConstitutiva = ApiService.GetActaConstitutiva(razonSocial, rfc, marca).Result;
             SATRequest sat = ApiService.GetSAT("ADAME SILVA AURELIO", rfc).Result;
-            //var impi = ApiService.GetIMPI("claro").Result;
+            IMPIRequest impi = ApiService.GetIMPI(marca).Result;
+            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional("victor hugo",  "01-01-2020", "01-08-2020").Result;
 
-            InformPage page = CreatePageService.CreateInformPage(actaConstitutiva, sat, rfc);
-
+            InformPage page = CreatePageService.CreateInformPage(actaConstitutiva, sat, impi, rfc, marca, antecedentes);
+            //InformPage page = CreatePageService.CreateInformPage(null, null, null, null, null, null);
             return View(page);
         }
 
@@ -46,4 +47,3 @@ namespace Nufi.kyb.v2.Controllers
         }
     }
 }
-

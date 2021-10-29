@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
-
 using Nufi.kyb.v2.Models;
 using Nufi.kyb.v2.Services;
 
@@ -17,20 +17,36 @@ namespace Nufi.kyb.v2.Services
         {
             WebHostEnvironment = webHostEnvironment;
         }
-        public InformPage CreateInformPage(ActaConstitutiva actaConstitutiva, SATRequest sat, string rfc)
+        public InformPage CreateInformPage(ActaConstitutiva actaConstitutiva, SATRequest sat, IMPIRequest impi, string rfc, string marca, AntecedentesPMNRequest antecedentes)
         {
-            SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, rfc);
+            SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca);
+            SuperSeccion[] antecedentesSection = CreateAntecedentesSections(antecedentes);
             InformPage generalPage = new InformPage(generalSection,
-                    new SuperSeccion[]{},
+                    antecedentesSection,
                     new SuperSeccion[]{},
                     new SuperSeccion[]{},
                     new SuperSeccion[]{},
                     new SuperSeccion[]{});
+            //InformPage generalPage = new InformPage(
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{});
             return generalPage;
         }
         
-        public SuperSeccion[] CreateGeneralSections(ActaConstitutiva actaConstitutiva, SATRequest sat, string rfc)
+        public SuperSeccion[] CreateGeneralSections(ActaConstitutiva actaConstitutiva, SATRequest sat, IMPIRequest impi, string rfc, string marca)
         {
+            List<Seccion> seccionesSatLista = new List<Seccion>();
+            string tituloSeccionSat = "Servicio de Administración Tributaria (SAT)";
+            SuperSeccion superSeccionSat, superSeccionImpi;
+            List<Seccion> seccionesImpiLista = new List<Seccion>();
+            string tituloSeccionImpi = "Instituto Mexicano de la Propiedad Industrial (IMPI)";
+            int i = 0;
+
+
             var datosGenerales = new Dato[]
             {
                 new Dato("Razón Social", actaConstitutiva.razon_social),
@@ -57,14 +73,9 @@ namespace Nufi.kyb.v2.Services
                 new Dato("País", actaConstitutiva.domicilio_fiscal.pais),
                 new Dato("Delegación / Municipio", actaConstitutiva.domicilio_fiscal.municipio)
             };
-
             // SAT API
-            List<Seccion> seccionesSatLista = new List<Seccion>();
-            string tituloSeccionSat = "Servicio de Administración Tributaria (SAT)";
-            SuperSeccion superSeccionSat;
             if (sat.data is not null)
             {
-                int i = 0;
                 foreach (var registro in sat.data)
                 {
                     i++;
@@ -105,12 +116,98 @@ namespace Nufi.kyb.v2.Services
                                                    null,
                                                    datosSat);
             }
+            if (impi.data.Length != 0)
+            {
+                i = 0;
+                foreach (var registro in impi.data)
+                {
+                    i++;
+
+                    var datosImpi = new Dato[]
+                    {
+                        new Dato("Nombre", registro.name),
+                        new Dato("Numero de Archivo", registro.fileNumber),
+                        new Dato("Tipo de Peticion", registro.requestType),
+                        new Dato("Cabecera", registro.headline),
+                        new Dato("Estado", registro.status),
+                    };
+                    seccionesImpiLista.Add(new Seccion("Registro " + i.ToString(), datosImpi));
+                }
+                Seccion[] seccionesImpi = seccionesImpiLista.ToArray();
+                superSeccionImpi = new SuperSeccion(true,
+                                                   tituloSeccionImpi, 
+                                                   seccionesImpi,
+                                                   null);
+            }
+            else
+            {
+                var datosImpi = new Dato[]
+                {
+                    new Dato("Marca", marca),
+                    new Dato("Resultado", impi.message)
+                };
+                superSeccionImpi = new SuperSeccion(false,
+                                                   tituloSeccionImpi,
+                                                   null,
+                                                   datosImpi);
+            }
 
             SuperSeccion[] superSecciones = new SuperSeccion[]
             {
                 new SuperSeccion(false, "Información General", null, datosGenerales),
                 new SuperSeccion(false, "Información Domiciliaria", null, datosDomiciliarios),
-                superSeccionSat
+                superSeccionSat, 
+                superSeccionImpi
+            };
+            return superSecciones;
+        }
+
+        public SuperSeccion[] CreateAntecedentesSections(AntecedentesPMNRequest antecedentes)
+        {
+            SuperSeccion superSeccionAnt;
+            List<Seccion> seccionesLista = new List<Seccion>();
+
+            if (antecedentes.data is not null)
+            {
+
+                foreach (var registro in antecedentes.data.resultados)
+                {
+
+                    var datos = new Dato[]
+                    {
+                        new Dato("Actor", "texto"),
+                        new Dato("Demandado", "texto"),
+                        new Dato("Fecha", "texto"),
+                        new Dato("Fuero", "texto"),
+                        new Dato("Juzgado", "texto"),
+                        new Dato("Tipo", "texto"),
+
+                    };
+                    seccionesLista.Add(new Seccion("Entidad: " + registro.entidad, datos));
+                }
+                Seccion[] secciones = seccionesLista.ToArray();
+                superSeccionAnt = new SuperSeccion(true,
+                                                   "Antecedentes", 
+                                                   secciones,
+                                                   null);
+
+            }
+                        else
+            {
+                var datos = new Dato[]
+                {
+                    new Dato("Registro Federal de Contribuyentes (RFC)", "0000"),
+                    new Dato("Resultado", "nada")
+                };
+                superSeccionAnt = new SuperSeccion(false,
+                                                   "nothin",
+                                                   null,
+                                                   datos);
+            }
+
+            SuperSeccion[] superSecciones = new SuperSeccion[]
+            {
+                superSeccionAnt
             };
             return superSecciones;
         }

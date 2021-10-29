@@ -1,5 +1,9 @@
 const tabs = [...document.querySelectorAll('.tabs>ul>li>a')];
 const sections = document.querySelectorAll('.section');
+const dropdownButton = document.querySelector('#dropdown');
+const dropdownItems = [...document.querySelectorAll('.dropdown-item')];
+const currentPage = document.title.split(' ');
+const buttonName = [];
 const ACTIVETAB = 'active';
 const ACTIVESECTION = 'activeSection';
 
@@ -27,11 +31,15 @@ function showSection (selectedSection) {
   selectedSection.classList.add(ACTIVESECTION);
 }
 
-const dropdownButton = document.querySelector('#dropdown');
-const dropdownItems = document.querySelectorAll('.dropdown-item');
-const currentPage = document.title.split(' ');
-const buttonName = [];
+dropdownItems.forEach(dItem => {
+  dItem.addEventListener('click', () => {
+    const sectionIndex = dropdownItems.indexOf(dItem);
+    console.log(sectionIndex);
+    showSection(sections[sectionIndex]);
+  });
+});
 
+dropdownButton.innerHTML = 'General';
 let withinSeparator = false;
 
 currentPage.forEach((word) => {
