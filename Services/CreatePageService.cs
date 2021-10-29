@@ -17,7 +17,19 @@ namespace Nufi.kyb.v2.Services
         {
             WebHostEnvironment = webHostEnvironment;
         }
-        public Page CreateGeneralPage(ActaConstitutiva actaConstitutiva, SATRequest sat, string rfc)
+        public InformPage CreateInformPage(ActaConstitutiva actaConstitutiva, SATRequest sat, string rfc)
+        {
+            SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, rfc);
+            InformPage generalPage = new InformPage(generalSection,
+                    new SuperSeccion[]{},
+                    new SuperSeccion[]{},
+                    new SuperSeccion[]{},
+                    new SuperSeccion[]{},
+                    new SuperSeccion[]{});
+            return generalPage;
+        }
+        
+        public SuperSeccion[] CreateGeneralSections(ActaConstitutiva actaConstitutiva, SATRequest sat, string rfc)
         {
             var datosGenerales = new Dato[]
             {
@@ -100,38 +112,7 @@ namespace Nufi.kyb.v2.Services
                 new SuperSeccion(false, "Información Domiciliaria", null, datosDomiciliarios),
                 superSeccionSat
             };
-            Page generalPage = new Page(superSecciones);
-            return generalPage;
-        }
-
-        public void SavePage(Page page, string title)
-        {
-            string path = Path.Combine(WebHostEnvironment.WebRootPath, "data", "pages") + "/";
-            string jsonFileName = Path.Combine(WebHostEnvironment.WebRootPath, "data", "pages", title);
-
-            if(!(Directory.Exists(path)))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            using(var outputStream = File.OpenWrite(jsonFileName))
-            {
-                JsonSerializer.Serialize<Page>(
-                    new Utf8JsonWriter(outputStream, new JsonWriterOptions
-                {
-                    SkipValidation = true,
-                    Indented = true
-                }), page);
-            }
-        }
-
-        public Page LoadPage(string title)
-        {
-            string jsonFileName = Path.Combine(WebHostEnvironment.WebRootPath, "data", "pages", title);
-            using(var jsonFileReader = File.OpenText(jsonFileName))
-            {
-                return JsonSerializer.Deserialize<Page>(jsonFileReader.ReadToEnd());
-            }
+            return superSecciones;
         }
     }
 }

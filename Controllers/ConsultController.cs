@@ -1,5 +1,4 @@
 using System;
-using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -29,42 +28,15 @@ namespace Nufi.kyb.v2.Controllers
 
         // Post method for General Page
         [HttpPost]
-        public IActionResult General(string razonSocial, string rfc, string marca)
+        public IActionResult Informe(string razonSocial, string rfc, string marca)
         {
             ActaConstitutiva actaConstitutiva = ApiService.GetActaConstitutiva(razonSocial, rfc, marca).Result;
             SATRequest sat = ApiService.GetSAT("ADAME SILVA AURELIO", rfc).Result;
             //var impi = ApiService.GetIMPI("claro").Result;
 
-            Page generalPage = CreatePageService.CreateGeneralPage(actaConstitutiva, sat, rfc);
+            InformPage page = CreatePageService.CreateInformPage(actaConstitutiva, sat, rfc);
 
-            CreatePageService.SavePage(generalPage, GeneralPageJsonFile);
-
-            return RedirecToAction("LoadConsult");
-        }
-
-        public IActionResult LoadConsult(Page page)
-        {
             return View(page);
-        }
-
-        //Get method for general page
-        [HttpGet]
-        public IActionResult General()
-        {
-            Page generalPage = CreatePageService.LoadPage(GeneralPageJsonFile);
-            return RedirecToAction(generalPage);
-        }
-
-        public IActionResult Antecedentes()
-        {
-            Page Antecedentes = new Page();
-            return View(Antecedentes);
-        }
-
-        public IActionResult RepresentantesLegales()
-        {
-            Page representantes = new Page();
-            return View(representantes);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
