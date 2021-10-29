@@ -48,18 +48,51 @@ namespace Nufi.kyb.v2.Controllers
         }
 
         public IActionResult Antecedentes() {
-            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional("victor hugo",  "01-01-2020", "01-08-2021").Result;
-            var superSecciones = new SuperSeccion[]
+            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional("victor hugo",  "01-01-2020", "01-08-2020").Result;
+            SuperSeccion superSeccionAnt;
+            List<Seccion> seccionesLista = new List<Seccion>();
+
+            if (antecedentes.data is not null)
             {
-                new SuperSeccion(false, "Entidad n", null, new Dato[]
+
+                foreach (var registro in antecedentes.data.resultados)
                 {
-                    new Dato("Actor", "texto"),
-                    new Dato("Demandado", "texto"),
-                    new Dato("Fecha", "texto"),
-                    new Dato("Fuero", "texto"),
-                    new Dato("Juzgado", "texto"),
-                    new Dato("Tipo", "texto"),
-                }),
+
+                    var datos = new Dato[]
+                    {
+                        new Dato("Actor", "texto"),
+                        new Dato("Demandado", "texto"),
+                        new Dato("Fecha", "texto"),
+                        new Dato("Fuero", "texto"),
+                        new Dato("Juzgado", "texto"),
+                        new Dato("Tipo", "texto"),
+
+                    };
+                    seccionesLista.Add(new Seccion("Entidad: " + registro.entidad, datos));
+                }
+                Seccion[] secciones = seccionesLista.ToArray();
+                superSeccionAnt = new SuperSeccion(true,
+                                                   "Antecedentes", 
+                                                   secciones,
+                                                   null);
+
+            }
+                        else
+            {
+                var datos = new Dato[]
+                {
+                    new Dato("Registro Federal de Contribuyentes (RFC)", "0000"),
+                    new Dato("Resultado", "nada")
+                };
+                superSeccionAnt = new SuperSeccion(false,
+                                                   "nothin",
+                                                   null,
+                                                   datos);
+            }
+
+            SuperSeccion[] superSecciones = new SuperSeccion[]
+            {
+                superSeccionAnt
             };
             Page AntcPage = new Page(superSecciones);
             return View(AntcPage);
@@ -71,6 +104,4 @@ namespace Nufi.kyb.v2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
-
 }
-

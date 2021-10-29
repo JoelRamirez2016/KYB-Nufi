@@ -1,4 +1,4 @@
-    using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -96,8 +96,7 @@ namespace Nufi.kyb.v2.Services
             string folio_electronico_otorgante,
             string numero_garantia_o_asiento,
             string curp_otorgante,
-            string rfc_otorgante
-)
+            string rfc_otorgante)
         {
             var request = new HttpRequestMessage(HttpMethod.Post,
                     "https://nufi.azure-api.net/consulta_rug/consultas/garantias_inmobiliarias");
@@ -148,7 +147,6 @@ namespace Nufi.kyb.v2.Services
                 var responseStream = await response.Content.ReadAsStreamAsync();
                 impiRequest = await JsonSerializer.DeserializeAsync<IMPIRequest>(responseStream);
             }          
-            Console.WriteLine(JsonSerializer.Serialize(impiRequest, new JsonSerializerOptions { WriteIndented = true }));
             return impiRequest;
         }
 
@@ -180,8 +178,5 @@ namespace Nufi.kyb.v2.Services
             }          
             return AntecedentesPMNrequest;
         }
-
-
     }
-
 }
