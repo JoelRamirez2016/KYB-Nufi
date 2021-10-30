@@ -13,26 +13,25 @@ namespace Nufi.kyb.v2.Services
     {
         public NufiApiService ApiService;
         public IWebHostEnvironment WebHostEnvironment { get; }
+
         public CreatePageService(IWebHostEnvironment webHostEnvironment)
         {
             WebHostEnvironment = webHostEnvironment;
         }
+
         public InformPage CreateInformPage(
             ActaConstitutiva actaConstitutiva, 
             SATRequest sat, IMPIRequest impi, 
             string rfc, string marca, 
             AntecedentesPMNRequest antecedentes)
         {
-            SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca);
-            SuperSeccion[] antecedentesSection = CreateAntecedentesSections(antecedentes, rfc);
-            SuperSeccion[] representantesSection = CreateRepresentantesSections(actaConstitutiva.representantes_legales);
-            SuperSeccion[] socios_fisicos = CreateSociosFisicosSections(actaConstitutiva.socios_fisicos);
-            InformPage generalPage = new InformPage(generalSection,
-                    antecedentesSection,
-                    representantesSection,
-                    socios_fisicos,
-                    new SuperSeccion[]{},
-                    new SuperSeccion[]{});
+            InformPage generalPage = new InformPage(
+                CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca),
+                CreateAntecedentesSections(antecedentes, rfc),
+                CreateRepresentantesSections(actaConstitutiva.representantes_legales),
+                CreateSociosFisicosSections(actaConstitutiva.socios_fisicos),
+                CreateSociosMoralesSections(actaConstitutiva.socios_morales),
+                new SuperSeccion[]{});
             return generalPage;
         }
         
@@ -48,7 +47,6 @@ namespace Nufi.kyb.v2.Services
             List<Seccion> seccionesImpiLista = new List<Seccion>();
             string tituloSeccionImpi = "Instituto Mexicano de la Propiedad Industrial (IMPI)";
             int i = 0;
-
 
             var datosGenerales = new Dato[]
             {
@@ -82,7 +80,6 @@ namespace Nufi.kyb.v2.Services
                 foreach (var registro in sat.data)
                 {
                     i++;
-
                     var datosSat = new Dato[]
                     {
                         new Dato("Registro Federal de Contribuyentes (RFC)", registro.rfc),
@@ -139,10 +136,7 @@ namespace Nufi.kyb.v2.Services
                                                        registro.fileNumber, datosImpi));
                 }
                 Seccion[] seccionesImpi = seccionesImpiLista.ToArray();
-                superSeccionImpi = new SuperSeccion(true,
-                                                    tituloSeccionImpi,
-                                                    seccionesImpi,
-                                                    null);
+                superSeccionImpi = new SuperSeccion(true, tituloSeccionImpi, seccionesImpi, null);
             }
             else
             {
@@ -167,7 +161,7 @@ namespace Nufi.kyb.v2.Services
             return superSecciones;
         }
 
-        public SuperSeccion[] CreateAntecedentesSections(AntecedentesPMNRequest antecedentes, string rfc)
+        public SuperSeccion[] CreateAntecedentesSections(AntecedentesPMNRequest antecedentes, string razon_social)
         {
             List<SuperSeccion> superSecciones = new List<SuperSeccion>();
 
@@ -196,7 +190,7 @@ namespace Nufi.kyb.v2.Services
             {
                 var datos = new Dato[]
                 {
-                    new Dato("Registro Federal de Contribuyentes (RFC)", rfc),
+                    new Dato("Razon Social", razon_social),
                     new Dato("Resultado", antecedentes.message)
                 };
                 superSecciones.Add(new SuperSeccion(false, "Antecedentes", null, datos));
@@ -268,6 +262,36 @@ namespace Nufi.kyb.v2.Services
                     new Dato("Resultado", "No se encontraron Socios Físicos")
                 };
                 superSectionsList.Add(new SuperSeccion(false, "Socios Físicos", null, data));
+            }
+            return superSectionsList.ToArray();
+        }
+
+        public SuperSeccion[] CreateSociosMoralesSections(PersonaMoral[] sociosMorales) 
+        {
+            List<SuperSeccion> superSectionsList = new List<SuperSeccion>();
+
+            if (sociosMorales is not null)
+            {
+                foreach (var socio in sociosMorales)
+                {
+                    var data = new Dato[]
+                    {
+                        new Dato("Razon Social", socio.razon_social),
+                        new Dato("RFC", socio.rfc),
+                        new Dato("Participacion Social", (socio.participacion_social * 100).ToString() + "%"),
+                        new Dato("Giro Mmercantil", socio.giro_mercantil),
+                        new Dato("Nacionalidad", socio.nacionalidad),
+                    };
+                    superSectionsList.Add(new SuperSeccion(false, socio.razon_social, null, data));
+                }
+            }
+            else
+            {
+                var data = new Dato[]
+                {
+                    new Dato("Resultado", "No se encontraron Socios Morales")
+                };
+                superSectionsList.Add(new SuperSeccion(false, "Socios Morales", null, data));
             }
             return superSectionsList.ToArray();
         }

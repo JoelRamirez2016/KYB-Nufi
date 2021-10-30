@@ -177,6 +177,8 @@ namespace Nufi.kyb.v2.Services
                 var responseStream = await response.Content.ReadAsStreamAsync();
                 AntecedentesPMNrequest = await JsonSerializer.DeserializeAsync<AntecedentesPMNRequest>(responseStream);
             }          
+            // Console.WriteLine(nombre, fecha_inicio, fecha_fin);
+            // Console.WriteLine(JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
             return AntecedentesPMNrequest;
         }
     }

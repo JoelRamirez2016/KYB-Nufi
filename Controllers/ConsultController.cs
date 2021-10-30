@@ -31,10 +31,12 @@ namespace Nufi.kyb.v2.Controllers
         [HttpPost]
         public IActionResult Informe(string razonSocial, string rfc, string marca)
         {
+            var today = DateTime.Today;
+            string dateFormat = "dd-MM-yyyy";                        
             actaConstitutiva = ApiService.GetActaConstitutiva(razonSocial, rfc, marca).Result;
-            SATRequest sat = ApiService.GetSAT("ADAME SILVA AURELIO", rfc).Result;
+            SATRequest sat = ApiService.GetSAT(razonSocial, rfc).Result;
             IMPIRequest impi = ApiService.GetIMPI(marca).Result;
-            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional("victor hugo",  "01-01-2020", "01-08-2020").Result;
+            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional(razonSocial,  "01-01-" + today.Year, today.ToString(dateFormat)).Result;
 
             InformPage page = CreatePageService.CreateInformPage(actaConstitutiva, sat, impi, rfc, marca, antecedentes);
             //InformPage page = CreatePageService.CreateInformPage(null, null, null, null, null, null);
