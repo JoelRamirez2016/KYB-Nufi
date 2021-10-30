@@ -25,21 +25,14 @@ namespace Nufi.kyb.v2.Services
         {
             SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca);
             SuperSeccion[] antecedentesSection = CreateAntecedentesSections(antecedentes, rfc);
-            SuperSeccion[] representantesSection = CreateRepresentantesSections(actaConstitutiva);
-
+            SuperSeccion[] representantesSection = CreateRepresentantesSections(actaConstitutiva.representantes_legales);
+            SuperSeccion[] socios_fisicos = CreateSociosFisicosSections(actaConstitutiva.socios_fisicos);
             InformPage generalPage = new InformPage(generalSection,
                     antecedentesSection,
                     representantesSection,
-                    new SuperSeccion[]{},
+                    socios_fisicos,
                     new SuperSeccion[]{},
                     new SuperSeccion[]{});
-            //InformPage generalPage = new InformPage(
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{});
             return generalPage;
         }
         
@@ -110,7 +103,7 @@ namespace Nufi.kyb.v2.Services
                 }
                 Seccion[] seccionesSat = seccionesSatLista.ToArray();
                 superSeccionSat = new SuperSeccion(true,
-                                                   tituloSeccionSat, 
+                                                   tituloSeccionSat,
                                                    seccionesSat,
                                                    null);
             }
@@ -141,13 +134,15 @@ namespace Nufi.kyb.v2.Services
                         new Dato("Cabecera", registro.headline),
                         new Dato("Estado", registro.status),
                     };
-                    seccionesImpiLista.Add(new Seccion("Registro " + i.ToString(), datosImpi));
+                    seccionesImpiLista.Add(new Seccion("Registro " + i.ToString() +
+                                                       " - " + registro.name + " - Número de archivo: " +
+                                                       registro.fileNumber, datosImpi));
                 }
                 Seccion[] seccionesImpi = seccionesImpiLista.ToArray();
                 superSeccionImpi = new SuperSeccion(true,
-                                                   tituloSeccionImpi, 
-                                                   seccionesImpi,
-                                                   null);
+                                                    tituloSeccionImpi,
+                                                    seccionesImpi,
+                                                    null);
             }
             else
             {
@@ -157,16 +152,16 @@ namespace Nufi.kyb.v2.Services
                     new Dato("Resultado", impi.message)
                 };
                 superSeccionImpi = new SuperSeccion(false,
-                                                   tituloSeccionImpi,
-                                                   null,
-                                                   datosImpi);
+                                                    tituloSeccionImpi,
+                                                    null,
+                                                    datosImpi);
             }
 
             SuperSeccion[] superSecciones = new SuperSeccion[]
             {
                 new SuperSeccion(false, "Información General", null, datosGenerales),
                 new SuperSeccion(false, "Información Domiciliaria", null, datosDomiciliarios),
-                superSeccionSat, 
+                superSeccionSat,
                 superSeccionImpi
             };
             return superSecciones;
@@ -209,32 +204,73 @@ namespace Nufi.kyb.v2.Services
             return superSecciones.ToArray();
         }
 
-        public SuperSeccion[] CreateRepresentantesSections(ActaConstitutiva actaConstitutiva) 
+        public SuperSeccion[] CreateRepresentantesSections(PersonaFisica[] representantes_legales) 
         {
             List<SuperSeccion> listaSuperSecciones = new List<SuperSeccion>();
-            foreach(var persona in actaConstitutiva.representantes_legales)
+            foreach(var persona in representantes_legales)
             {
                 var datos = new Dato[]
                 {
-                    new Dato("nombres", persona.nombres),
-                    new Dato("apellido_paterno", persona.apellido_paterno),
-                    new Dato("apellido_materno", persona.apellido_materno),
-                    new Dato("nacionalidad", persona.nacionalidad),
-                    new Dato("fecha_nacimiento", persona.fecha_nacimiento),
-                    // new Dato("rfc", persona.rfc.ToString()),
-                    new Dato("genero", persona.genero),
-                    new Dato("pais_residencia", persona.pais_residencia),
-                    new Dato("pais_nacimiento", persona.pais_nacimiento),
-                    new Dato("entidad_federativa_nacimiento", persona.entidad_federativa_nacimiento),
-                    new Dato("actividad_economica", persona.actividad_economica),
-                    new Dato("telefono", persona.telefono),
-                    new Dato("correo_electronico", persona.correo_electronico),
-                    // new Dato("curp", persona.curp.ToString())
-                    // new Dato("domicilio",actaConstitutivadomicilio.)
+                        new Dato("Nombres", persona.nombres),
+                        new Dato("Apellido Paterno", persona.apellido_paterno),
+                        new Dato("Apellido Materno", persona.apellido_materno),
+                        new Dato("Nacionalidad", persona.nacionalidad),
+                        new Dato("Fecha de Nacimiento", persona.fecha_nacimiento),
+                        new Dato("rfc", persona.rfc),
+                        new Dato("Genero", persona.genero),
+                        new Dato("País de Residencia", persona.pais_residencia),
+                        new Dato("País de Nacimiento", persona.pais_nacimiento),
+                        new Dato("Entidad Federativa de Nacimiento", persona.entidad_federativa_nacimiento),
+                        new Dato("Actividad Económica", persona.actividad_economica),
+                        new Dato("Teléfono", persona.telefono),
+                        new Dato("Correo Eletrónico", persona.correo_electronico),
+                        new Dato("Curp", persona.curp)
                 };
-                listaSuperSecciones.Add(new SuperSeccion(false, "Alfredo", null, datos));
+                listaSuperSecciones.Add(new SuperSeccion(false, persona.nombres + " " + persona.apellido_paterno +
+                                " " + persona.apellido_materno, null, datos));
             }
             return listaSuperSecciones.ToArray();
         }
+
+        public SuperSeccion[] CreateSociosFisicosSections(PersonaFisica[] sociosFisicos) 
+        {
+            List<SuperSeccion> superSectionsList = new List<SuperSeccion>();
+
+            if (sociosFisicos is not null)
+            {
+                foreach (var socio in sociosFisicos)
+                {
+                    var data = new Dato[]
+                    {
+                        new Dato("Nombres", socio.nombres),
+                        new Dato("Apellido Paterno", socio.apellido_paterno),
+                        new Dato("Apellido Materno", socio.apellido_materno),
+                        new Dato("Nacionalidad", socio.nacionalidad),
+                        new Dato("Fecha de Nacimiento", socio.fecha_nacimiento),
+                        new Dato("rfc", socio.rfc),
+                        new Dato("Genero", socio.genero),
+                        new Dato("País de Residencia", socio.pais_residencia),
+                        new Dato("País de Nacimiento", socio.pais_nacimiento),
+                        new Dato("Entidad Federativa de Nacimiento", socio.entidad_federativa_nacimiento),
+                        new Dato("Actividad Económica", socio.actividad_economica),
+                        new Dato("Teléfono", socio.telefono),
+                        new Dato("Correo Eletrónico", socio.correo_electronico),
+                        new Dato("Curp", socio.curp)
+                    };
+                    superSectionsList.Add(new SuperSeccion(false, socio.nombres + " " + socio.apellido_paterno +
+                                " " + socio.apellido_materno, null, data));
+                }
+            }
+            else
+            {
+                var data = new Dato[]
+                {
+                    new Dato("Resultado", "No se encontraron Socios Físicos")
+                };
+                superSectionsList.Add(new SuperSeccion(false, "Socios Físicos", null, data));
+            }
+            return superSectionsList.ToArray();
+        }
+
     }
 }
