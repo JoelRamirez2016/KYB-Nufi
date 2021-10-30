@@ -22,21 +22,21 @@ namespace Nufi.kyb.v2.Services
             SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca);
             SuperSeccion[] antecedentesSection = CreateAntecedentesSections(antecedentes);
             InformPage generalPage = new InformPage(generalSection,
-                    antecedentesSection,
-                    new SuperSeccion[]{},
-                    new SuperSeccion[]{},
-                    new SuperSeccion[]{},
-                    new SuperSeccion[]{});
+                                                    antecedentesSection,
+                                                    new SuperSeccion[] {},
+                                                    new SuperSeccion[] {},
+                                                    new SuperSeccion[] {},
+                                                    new SuperSeccion[] {});
             //InformPage generalPage = new InformPage(
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{},
-                    //new SuperSeccion[]{});
+            //new SuperSeccion[]{},
+            //new SuperSeccion[]{},
+            //new SuperSeccion[]{},
+            //new SuperSeccion[]{},
+            //new SuperSeccion[]{},
+            //new SuperSeccion[]{});
             return generalPage;
         }
-        
+
         public SuperSeccion[] CreateGeneralSections(ActaConstitutiva actaConstitutiva, SATRequest sat, IMPIRequest impi, string rfc, string marca)
         {
             List<Seccion> seccionesSatLista = new List<Seccion>();
@@ -100,7 +100,7 @@ namespace Nufi.kyb.v2.Services
                 }
                 Seccion[] seccionesSat = seccionesSatLista.ToArray();
                 superSeccionSat = new SuperSeccion(true,
-                                                   tituloSeccionSat, 
+                                                   tituloSeccionSat,
                                                    seccionesSat,
                                                    null);
             }
@@ -131,13 +131,15 @@ namespace Nufi.kyb.v2.Services
                         new Dato("Cabecera", registro.headline),
                         new Dato("Estado", registro.status),
                     };
-                    seccionesImpiLista.Add(new Seccion("Registro " + i.ToString(), datosImpi));
+                    seccionesImpiLista.Add(new Seccion("Registro " + i.ToString() +
+                                                       " - " + registro.name + " - Número de archivo: " +
+                                                       registro.fileNumber, datosImpi));
                 }
                 Seccion[] seccionesImpi = seccionesImpiLista.ToArray();
                 superSeccionImpi = new SuperSeccion(true,
-                                                   tituloSeccionImpi, 
-                                                   seccionesImpi,
-                                                   null);
+                                                    tituloSeccionImpi,
+                                                    seccionesImpi,
+                                                    null);
             }
             else
             {
@@ -147,16 +149,16 @@ namespace Nufi.kyb.v2.Services
                     new Dato("Resultado", impi.message)
                 };
                 superSeccionImpi = new SuperSeccion(false,
-                                                   tituloSeccionImpi,
-                                                   null,
-                                                   datosImpi);
+                                                    tituloSeccionImpi,
+                                                    null,
+                                                    datosImpi);
             }
 
             SuperSeccion[] superSecciones = new SuperSeccion[]
             {
                 new SuperSeccion(false, "Información General", null, datosGenerales),
                 new SuperSeccion(false, "Información Domiciliaria", null, datosDomiciliarios),
-                superSeccionSat, 
+                superSeccionSat,
                 superSeccionImpi
             };
             return superSecciones;
@@ -187,12 +189,12 @@ namespace Nufi.kyb.v2.Services
                 }
                 Seccion[] secciones = seccionesLista.ToArray();
                 superSeccionAnt = new SuperSeccion(true,
-                                                   "Antecedentes", 
+                                                   "Antecedentes",
                                                    secciones,
                                                    null);
 
             }
-                        else
+            else
             {
                 var datos = new Dato[]
                 {
