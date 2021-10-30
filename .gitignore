@@ -8,4 +8,5 @@ wwwroot/bundle.**
 wwwroot/data/**
 .vscode/
 .vs/
-
+tmp
+todo

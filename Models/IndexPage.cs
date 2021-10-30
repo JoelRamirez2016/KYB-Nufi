@@ -2,9 +2,9 @@
 
 namespace Nufi.kyb.v2.Models
 {
-	public class IndexPage : Page
+	public class IndexPage
 	{
-		public IndexPage(FieldForm[] fields) : base(null)
+		public IndexPage(FieldForm[] fields)
 		{
 			Fields = fields;
 		}

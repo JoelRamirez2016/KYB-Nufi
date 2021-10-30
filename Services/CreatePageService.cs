@@ -17,7 +17,37 @@ namespace Nufi.kyb.v2.Services
         {
             WebHostEnvironment = webHostEnvironment;
         }
-        public Page CreateGeneralPage(ActaConstitutiva actaConstitutiva, SATRequest sat, IMPIRequest impi, string rfc, string marca)
+        public InformPage CreateInformPage(
+            ActaConstitutiva actaConstitutiva, 
+            SATRequest sat, IMPIRequest impi, 
+            string rfc, string marca, 
+            AntecedentesPMNRequest antecedentes)
+        {
+            SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca);
+            SuperSeccion[] antecedentesSection = CreateAntecedentesSections(antecedentes, rfc);
+            SuperSeccion[] representantesSection = CreateRepresentantesSections(actaConstitutiva);
+
+            InformPage generalPage = new InformPage(generalSection,
+                    antecedentesSection,
+                    representantesSection,
+                    new SuperSeccion[]{},
+                    new SuperSeccion[]{},
+                    new SuperSeccion[]{});
+            //InformPage generalPage = new InformPage(
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{});
+            return generalPage;
+        }
+        
+        public SuperSeccion[] CreateGeneralSections(
+            ActaConstitutiva actaConstitutiva, 
+            SATRequest sat, 
+            IMPIRequest impi, 
+            string rfc, string marca)
         {
             List<Seccion> seccionesSatLista = new List<Seccion>();
             string tituloSeccionSat = "Servicio de Administración Tributaria (SAT)";
@@ -139,33 +169,72 @@ namespace Nufi.kyb.v2.Services
                 superSeccionSat, 
                 superSeccionImpi
             };
-            Page generalPage = new Page(superSecciones);
-            return generalPage;
+            return superSecciones;
         }
 
-        public void SavePage(Page page, string title)
+        public SuperSeccion[] CreateAntecedentesSections(AntecedentesPMNRequest antecedentes, string rfc)
         {
-            string path = Path.Combine(WebHostEnvironment.WebRootPath, "data", "pages") + "/";
-            string jsonFileName = Path.Combine(WebHostEnvironment.WebRootPath, "data", "pages", title);
+            List<SuperSeccion> superSecciones = new List<SuperSeccion>();
 
-            if(!(Directory.Exists(path)))
+            if (antecedentes.data is not null)
             {
-                Directory.CreateDirectory(path);
+                foreach (var registro in antecedentes.data.resultados)
+                {
+                    List<Seccion> seccionesLista = new List<Seccion>();
+                    foreach (var expediente in registro.expedientes)
+                    {
+                        var datos = new Dato[]
+                        {
+                            new Dato("Actor", expediente.actor),
+                            new Dato("Demandado", expediente.demandado),
+                            new Dato("Fecha", expediente.fecha),
+                            new Dato("Fuero", expediente.fuero),
+                            new Dato("Juzgado", expediente.juzgado),
+                            new Dato("Tipo", expediente.tipo)
+                        };
+                        seccionesLista.Add(new Seccion("Expediente: " + expediente.expediente, datos));
+                    }
+                    superSecciones.Add(new SuperSeccion(true, registro.entidad, seccionesLista.ToArray(), null));
+                }
             }
-
-            using(var outputStream = File.OpenWrite(jsonFileName))
+            else
             {
-                JsonSerializer.Serialize<Page>(new Utf8JsonWriter(outputStream), page);
+                var datos = new Dato[]
+                {
+                    new Dato("Registro Federal de Contribuyentes (RFC)", rfc),
+                    new Dato("Resultado", antecedentes.message)
+                };
+                superSecciones.Add(new SuperSeccion(false, "Antecedentes", null, datos));
             }
+            return superSecciones.ToArray();
         }
 
-        public Page LoadPage(string title)
+        public SuperSeccion[] CreateRepresentantesSections(ActaConstitutiva actaConstitutiva) 
         {
-            string jsonFileName = Path.Combine(WebHostEnvironment.WebRootPath, "data", "pages", title);
-            using(var jsonFileReader = File.OpenText(jsonFileName))
+            List<SuperSeccion> listaSuperSecciones = new List<SuperSeccion>();
+            foreach(var persona in actaConstitutiva.representantes_legales)
             {
-                return JsonSerializer.Deserialize<Page>(jsonFileReader.ReadToEnd());
+                var datos = new Dato[]
+                {
+                    new Dato("nombres", persona.nombres),
+                    new Dato("apellido_paterno", persona.apellido_paterno),
+                    new Dato("apellido_materno", persona.apellido_materno),
+                    new Dato("nacionalidad", persona.nacionalidad),
+                    new Dato("fecha_nacimiento", persona.fecha_nacimiento),
+                    // new Dato("rfc", persona.rfc.ToString()),
+                    new Dato("genero", persona.genero),
+                    new Dato("pais_residencia", persona.pais_residencia),
+                    new Dato("pais_nacimiento", persona.pais_nacimiento),
+                    new Dato("entidad_federativa_nacimiento", persona.entidad_federativa_nacimiento),
+                    new Dato("actividad_economica", persona.actividad_economica),
+                    new Dato("telefono", persona.telefono),
+                    new Dato("correo_electronico", persona.correo_electronico),
+                    // new Dato("curp", persona.curp.ToString())
+                    // new Dato("domicilio",actaConstitutivadomicilio.)
+                };
+                listaSuperSecciones.Add(new SuperSeccion(false, "Alfredo", null, datos));
             }
+            return listaSuperSecciones.ToArray();
         }
     }
 }

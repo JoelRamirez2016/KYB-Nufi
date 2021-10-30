@@ -1,0 +1,25 @@
+@model Nufi.kyb.v2.Models.InformPage
+@using Nufi.kyb.v2.Components
+@{
+  ViewData["Title"] = "Informe";
+}
+
+@section sidebar{
+@(await Html.RenderComponentAsync<Sidebar>(RenderMode.ServerPrerendered))
+}
+
+@section header{
+@(await Html.RenderComponentAsync<Header>(RenderMode.Static, new {index="false", tabSelected=0}))
+}
+
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Información General", SuperSections=@Model.GeneralSections, id="generalSection"}))
+
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Antecedentes Judiciales", SuperSections=@Model.AntecedentesSections, id="antecedentesSecition"}))
+
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Representantes Legales", SuperSections=@Model.RepresentantesSecitions, id="representantesSection"}))
+
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Socios Físicos", SuperSections=@Model.SociosFisicosSections, id="sociosFisicosSections"}))
+
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Soscios Morales", SuperSections=@Model.SociosMoralesSections, id="sociosMoralesSection"}))
+
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Adjuntos", SuperSections=@Model.AdjuntosSections, id="adjuntosSection"}))
