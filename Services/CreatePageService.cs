@@ -27,13 +27,7 @@ namespace Nufi.kyb.v2.Services
                                                     new SuperSeccion[] {},
                                                     new SuperSeccion[] {},
                                                     new SuperSeccion[] {});
-            //InformPage generalPage = new InformPage(
-            //new SuperSeccion[]{},
-            //new SuperSeccion[]{},
-            //new SuperSeccion[]{},
-            //new SuperSeccion[]{},
-            //new SuperSeccion[]{},
-            //new SuperSeccion[]{});
+            //InformPage generalPage = new InformPage( new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{});
             return generalPage;
         }
 
