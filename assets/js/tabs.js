@@ -5,13 +5,16 @@ const dropdownItems = [...document.querySelectorAll('.dropdown-item')];
 const ACTIVETAB = 'active';
 const ACTIVESECTION = 'activeSection';
 
-sections[0].classList.add(ACTIVESECTION);
+if (sections[0]) {
+  sections[0].classList.add(ACTIVESECTION);
+}
 
 tabs.forEach(tab => {
   tab.addEventListener('click', () => {
     const sectionIndex = tabs.indexOf(tab);
     activateTab(tab);
     showSection(sections[sectionIndex]);
+    dropdownButton.innerHTML = tab.innerHTML;
   });
 });
 
@@ -32,15 +35,17 @@ function showSection (selectedSection) {
 dropdownItems.forEach(dItem => {
   dItem.addEventListener('click', () => {
     const sectionIndex = dropdownItems.indexOf(dItem);
-    console.log(sectionIndex);
     showSection(sections[sectionIndex]);
   });
 });
 
-dropdownButton.innerHTML = 'General';
+if (dropdownButton) {
+  dropdownButton.innerHTML = 'General';
+}
 
 dropdownItems.forEach((dropdownItem) => {
   dropdownItem.addEventListener('click', () => {
     dropdownButton.innerHTML = dropdownItem.innerHTML;
+    activateTab(tabs[dropdownItems.indexOf(dropdownItem)]);
   });
 });
