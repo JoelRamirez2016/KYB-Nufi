@@ -21,10 +21,11 @@ namespace Nufi.kyb.v2.Services
         {
             SuperSeccion[] generalSection = CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca);
             SuperSeccion[] antecedentesSection = CreateAntecedentesSections(antecedentes);
+            SuperSeccion[] sociosFisicos = CreateSociosFisicosSections(actaConstitutiva.socios_fisicos);
             InformPage generalPage = new InformPage(generalSection,
                                                     antecedentesSection,
                                                     new SuperSeccion[] {},
-                                                    new SuperSeccion[] {},
+                                                    sociosFisicos,
                                                     new SuperSeccion[] {},
                                                     new SuperSeccion[] {});
             //InformPage generalPage = new InformPage( new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{}, new SuperSeccion[]{});
@@ -186,7 +187,6 @@ namespace Nufi.kyb.v2.Services
                                                    "Antecedentes",
                                                    secciones,
                                                    null);
-
             }
             else
             {
@@ -207,5 +207,46 @@ namespace Nufi.kyb.v2.Services
             };
             return superSecciones;
         }
+
+        public SuperSeccion[] CreateSociosFisicosSections(PersonaFisica[] sociosFisicos) 
+        {
+            List<SuperSeccion> superSectionsList = new List<SuperSeccion>();
+
+            if (sociosFisicos is not null)
+            {
+                foreach (var socio in sociosFisicos)
+                {
+                    var data = new Dato[]
+                    {
+                        new Dato("Nombres", socio.nombres),
+                        new Dato("Apellido Paterno", socio.apellido_paterno),
+                        new Dato("Apellido Materno", socio.apellido_materno),
+                        new Dato("Nacionalidad", socio.nacionalidad),
+                        new Dato("Fecha de Nacimiento", socio.fecha_nacimiento),
+                        new Dato("rfc", socio.rfc),
+                        new Dato("Genero", socio.genero),
+                        new Dato("País de Residencia", socio.pais_residencia),
+                        new Dato("País de Nacimiento", socio.pais_nacimiento),
+                        new Dato("Entidad Federativa de Nacimiento", socio.entidad_federativa_nacimiento),
+                        new Dato("Actividad Económica", socio.actividad_economica),
+                        new Dato("Teléfono", socio.telefono),
+                        new Dato("Correo Eletrónico", socio.correo_electronico),
+                        new Dato("Curp", socio.curp)
+                    };
+                    superSectionsList.Add(new SuperSeccion(false, socio.nombres + " " + socio.apellido_paterno +
+                                " " + socio.apellido_materno, null, data));
+                }
+            }
+            else
+            {
+                var data = new Dato[]
+                {
+                    new Dato("Resultado", "No se encontraron Socios Físicos")
+                };
+                superSectionsList.Add(new SuperSeccion(false, "Socios Físicos", null, data));
+            }
+            return superSectionsList.ToArray();
+        }
+
     }
 }
