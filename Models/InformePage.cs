@@ -16,15 +16,13 @@ namespace Nufi.kyb.v2.Models
                 SuperSeccion[] antecedentes,
                 SuperSeccion[] representantes,
                 SuperSeccion[] sociosFisicos,
-                SuperSeccion[] sociosMorales,
-                SuperSeccion[] adjuntos)
+                SuperSeccion[] sociosMorales)
         {
             GeneralSections = general;
             AntecedentesSections = antecedentes;
             RepresentantesSecitions = representantes;
             SociosFisicosSections = sociosFisicos;
             SociosMoralesSections = sociosMorales;
-            AdjuntosSections = adjuntos;
         }
         public InformPage() {}
 
@@ -33,7 +31,6 @@ namespace Nufi.kyb.v2.Models
         public SuperSeccion[] RepresentantesSecitions { get; set; } = new SuperSeccion[]{};
         public SuperSeccion[] SociosFisicosSections { get; set; } = new SuperSeccion[]{};
         public SuperSeccion[] SociosMoralesSections { get; set; } = new SuperSeccion[]{};
-        public SuperSeccion[] AdjuntosSections { get; set; } = new SuperSeccion[]{};
     }
 }
 

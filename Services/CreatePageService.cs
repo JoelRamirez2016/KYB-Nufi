@@ -30,8 +30,15 @@ namespace Nufi.kyb.v2.Services
                 CreateAntecedentesSections(antecedentes, rfc),
                 CreateRepresentantesSections(actaConstitutiva.representantes_legales),
                 CreateSociosFisicosSections(actaConstitutiva.socios_fisicos),
-                CreateSociosMoralesSections(actaConstitutiva.socios_morales),
-                new SuperSeccion[]{});
+                CreateSociosMoralesSections(actaConstitutiva.socios_morales)
+                );
+            //InformPage generalPage = new InformPage(
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{},
+                    //new SuperSeccion[]{}
+                    //);
             return generalPage;
         }
         

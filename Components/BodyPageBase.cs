@@ -9,10 +9,9 @@ namespace Nufi.kyb.v2.Components
     {
         [Parameter]
         public string Title { get; set; }
+
         [Parameter]
         public SuperSeccion[] SuperSections { get; set; }
-        [Parameter]
-        public string id { get; set; }
 
         public string createId(string a, string b)
         {

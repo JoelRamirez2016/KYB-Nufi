@@ -12,14 +12,29 @@
 @(await Html.RenderComponentAsync<Header>(RenderMode.Static, new {index="false"}))
 }
 
-@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Información General", SuperSections=@Model.GeneralSections, id="generalSection"}))
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Información General", SuperSections=@Model.GeneralSections}))
 
-@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Antecedentes Judiciales", SuperSections=@Model.AntecedentesSections, id="antecedentesSecition"}))
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Antecedentes Judiciales", SuperSections=@Model.AntecedentesSections}))
 
-@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Representantes Legales", SuperSections=@Model.RepresentantesSecitions, id="representantesSection"}))
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Representantes Legales", SuperSections=@Model.RepresentantesSecitions}))
 
-@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Socios Físicos", SuperSections=@Model.SociosFisicosSections, id="sociosFisicosSections"}))
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Socios Físicos", SuperSections=@Model.SociosFisicosSections}))
 
-@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Socios Morales", SuperSections=@Model.SociosMoralesSections, id="sociosMoralesSection"}))
+@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Socios Morales", SuperSections=@Model.SociosMoralesSections}))
 
-@(await Html.RenderComponentAsync<BodyPage>(RenderMode.Static, new {Title="Adjuntos", SuperSections=@Model.AdjuntosSections, id="adjuntosSection"}))
+<div class="section container flex flex-column justify-content-center mt-3">
+  <div class="m-3 p-3 attached-section">
+    <h3 class="fw-bold">Acta Constitutiva</h3>
+    <p>Documentos oficiales</p>
+    <button class="btn btn-primary text-light shadow-sm">VER PDF
+      <i class="bi bi-file-earmark-pdf-fill"></i>
+    </button>
+  </div>
+  <div class="m-3 p-3 attached-section">
+    <h3 class="fw-bold">Estados Financieros</h3>
+    <p>Documentos privados</p>
+    <button class="btn btn-primary text-light shadow-sm">VER PDF
+      <i class="bi bi-file-earmark-pdf-fill"></i>
+    </button>
+  </div>
+</div>
