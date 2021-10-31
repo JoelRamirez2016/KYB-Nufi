@@ -22,12 +22,12 @@ namespace Nufi.kyb.v2.Services
         public InformPage CreateInformPage(
             ActaConstitutiva actaConstitutiva, 
             SATRequest sat, IMPIRequest impi, 
-            string rfc, string marca, 
+            string razon_social, string rfc, string marca, 
             AntecedentesPMNRequest antecedentes)
         {
             InformPage generalPage = new InformPage(
                 CreateGeneralSections(actaConstitutiva, sat, impi, rfc, marca),
-                CreateAntecedentesSections(antecedentes, rfc),
+                CreateAntecedentesSections(antecedentes, razon_social),
                 CreateRepresentantesSections(actaConstitutiva.representantes_legales),
                 CreateSociosFisicosSections(actaConstitutiva.socios_fisicos),
                 CreateSociosMoralesSections(actaConstitutiva.socios_morales)

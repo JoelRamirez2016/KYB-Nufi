@@ -36,9 +36,10 @@ namespace Nufi.kyb.v2.Controllers
             actaConstitutiva = ApiService.GetActaConstitutiva(razonSocial, rfc, marca).Result;
             SATRequest sat = ApiService.GetSAT(razonSocial, rfc).Result;
             IMPIRequest impi = ApiService.GetIMPI(marca).Result;
-            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional(razonSocial,  "01-01-" + today.Year, today.ToString(dateFormat)).Result;
+            // var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional(razonSocial,  "01-01-" + today.Year, today.ToString(dateFormat)).Result;
+            var antecedentes = ApiService.GetAntecedentesPersonaMoralNacional(razonSocial,  "01-01-2020", "01-08-2020").Result;
 
-            InformPage page = CreatePageService.CreateInformPage(actaConstitutiva, sat, impi, rfc, marca, antecedentes);
+            InformPage page = CreatePageService.CreateInformPage(actaConstitutiva, sat, impi, razonSocial, rfc, marca, antecedentes);
             //InformPage page = CreatePageService.CreateInformPage(null, null, null, null, null, null);
             return View(page);
         }
