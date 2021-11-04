@@ -1,6 +1,8 @@
 # Nufi KYB
-Get the general information of a company
+Obtain enough information from a company to complete the kyb (Know your business) process
 
+## Documentation 
+* [Notion Docs](https://melted-crabapple-d51.notion.site/Nufi-Stuff-2cd05c1054034d91a73b80ba0ddefbae)
 ## Installation
 * Clone this repository: `git clone "https://github.com/"`
 * Access to Nufi.kyb.v2 directory: `cd Nufi.kyb.v2`
@@ -9,7 +11,7 @@ Get the general information of a company
 * Open your browser and go to url `localhost:5000`
 
 ## Usage
-Write in the fields Razon Social, RFC, marca, data corresponding to the company to searchand and see the information 
+Write in the fields Razon Social, RFC, marca, data corresponding to the company to searchand and see the information. For Example: `| Razon Social: Nufi | RFC: NUF201221PC7| Marca: Nufi |`
 
 ## Authors
 * Joel Ramirez - [Github](https://github.com/JoelRamirez2016)
